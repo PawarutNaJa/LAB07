@@ -23,7 +23,7 @@ export default async function Home() {
       <div className="text-center py-16 px-4">
         <h1 className="text-5xl font-bold text-blue-900 mb-4">สวัสดี! 👋</h1>
         <p className="text-xl text-gray-600 mb-8">
-          บล็อกของ <strong>[ชื่อของคุณ]</strong> • นิสิตปี 3 CS
+          บล็อกของ <strong>ปวรุตม์ สุขรอด</strong> • นิสิตปี 3 CS
         </p>
         <Link href="/posts"
           className="px-6 py-3 bg-blue-600 text-white rounded-lg
