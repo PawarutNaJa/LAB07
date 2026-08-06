@@ -1,34 +1,55 @@
-import { addMessage, getMessages } from '@/lib/messages';
+import {
+  createMessage,
+  listMessages,
+} from '@/lib/messageService';
 
-export async function GET() {
+import { withErrorHandling } from '@/lib/withErrorHandling';
+
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const search = url.searchParams.get('search') ?? '';
+
+  const allMessages = listMessages();
+
+  const filteredMessages = search
+    ? allMessages.filter((item) => {
+        return (
+          item.name.includes(search) ||
+          item.message.includes(search)
+        );
+      })
+    : allMessages;
+
   return Response.json({
-    messages: getMessages(),
+    messages: filteredMessages,
   });
 }
 
-export async function POST(request: Request) {
-  try {
+export const POST = withErrorHandling(
+  async (request: Request) => {
     const body = await request.json();
 
-    if (
-      !body.name ||
-      !body.email ||
-      !body.message
-    ) {
-      return Response.json(
-        {
-          error: 'ข้อมูลไม่ครบ',
-        },
-        {
-          status: 400,
-        }
-      );
-    }
+    const name =
+      typeof body?.name === 'string'
+        ? body.name.trim()
+        : '';
 
-    const saved = addMessage({
-      name: body.name,
-      email: body.email,
-      message: body.message,
+    const email =
+      typeof body?.email === 'string'
+        ? body.email.trim()
+        : '';
+
+    const message =
+      typeof body?.message === 'string'
+        ? body.message.trim()
+        : typeof body?.content === 'string'
+          ? body.content.trim()
+          : '';
+
+    const saved = createMessage({
+      name,
+      email,
+      message,
     });
 
     return Response.json(
@@ -40,14 +61,5 @@ export async function POST(request: Request) {
         status: 201,
       }
     );
-  } catch {
-    return Response.json(
-      {
-        error: 'ข้อมูลไม่ถูกต้อง',
-      },
-      {
-        status: 400,
-      }
-    );
   }
-}
+);

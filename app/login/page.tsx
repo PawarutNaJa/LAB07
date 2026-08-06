@@ -35,7 +35,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/dashboard');
+      router.replace('/dashboard');
       router.refresh();
     } catch (err) {
       setError('เกิดข้อผิดพลาด');
@@ -44,51 +44,63 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-        <h1 className="mb-6 text-center text-3xl font-bold">
-          Login
-        </h1>
+    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.16),_transparent_45%)] px-4 py-10">
+      <div className="w-full max-w-md overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_30px_80px_-35px_rgba(37,99,235,0.45)] backdrop-blur-sm">
+        <div className="bg-gradient-to-r from-blue-700 to-indigo-700 px-8 py-7 text-white">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-100">
+            My Blog
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold">
+            เข้าสู่ระบบ
+          </h1>
+          <p className="mt-2 text-sm text-blue-100">
+            ใช้บัญชีของคุณเพื่อดู Dashboard และจัดการข้อมูล
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full rounded border p-3"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <form onSubmit={handleSubmit} className="space-y-5 p-8">
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-slate-700">
+              อีเมล
+            </label>
+            <input
+              type="email"
+              placeholder="name@example.com"
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full rounded border p-3"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-slate-700">
+              รหัสผ่าน
+            </label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
           {error && (
-            <p className="text-red-600">
+            <div className="rounded-2xl border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-600">
               {error}
-            </p>
+            </div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded bg-blue-600 py-3 text-white hover:bg-blue-700 disabled:bg-gray-400"
+            className="w-full rounded-2xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
             {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
           </button>
         </form>
-
-        <div className="mt-6 rounded bg-gray-100 p-4 text-sm">
-          <p className="font-bold">บัญชีทดสอบ</p>
-          <p>Email : admin@tsu.ac.th</p>
-          <p>Password : 1234</p>
-        </div>
       </div>
     </main>
   );

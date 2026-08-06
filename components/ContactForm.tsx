@@ -82,7 +82,7 @@ export default function CommentForm({
     setStatus('sending');
 
     try {
-      const res = await fetch('/api/comments', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export default function CommentForm({
           postId,
           name,
           email,
-          content,
+          message: content,
         }),
       });
 
@@ -120,15 +120,18 @@ export default function CommentForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+      className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_22px_60px_-30px_rgba(37,99,235,0.45)] backdrop-blur-sm"
     >
-      <div className="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-5 text-white">
-        <h2 className="text-2xl font-bold">
-          แสดงความคิดเห็น
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-sky-600 px-6 py-6 text-white">
+        <div className="inline-flex rounded-full bg-white/15 px-3 py-1 text-sm font-medium text-blue-50">
+          📝 แบบฟอร์มภาษาไทย
+        </div>
+        <h2 className="mt-3 text-2xl font-semibold">
+          ส่งข้อความถึงเรา
         </h2>
 
         <p className="mt-1 text-sm text-blue-100">
-          กรุณากรอกข้อมูลให้ครบก่อนส่งความคิดเห็น
+          กรุณากรอกข้อมูลให้ครบก่อนส่งข้อความ เพื่อให้เราตอบกลับคุณได้อย่างรวดเร็ว
         </p>
       </div>
 
@@ -150,10 +153,10 @@ export default function CommentForm({
               resetStatus();
             }}
             placeholder="กรอกชื่อของคุณ"
-            className={`w-full rounded-xl border px-4 py-3 outline-none transition focus:ring-4 ${
+            className={`w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4 ${
               name.length > 0 && !nameValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100'
+                : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
             }`}
           />
 
@@ -181,10 +184,10 @@ export default function CommentForm({
               resetStatus();
             }}
             placeholder="example@email.com"
-            className={`w-full rounded-xl border px-4 py-3 outline-none transition focus:ring-4 ${
+            className={`w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4 ${
               email.length > 0 && !emailValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100'
+                : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
             }`}
           />
 
@@ -227,10 +230,10 @@ export default function CommentForm({
             placeholder="เขียนความคิดเห็นเกี่ยวกับโพสต์นี้"
             rows={6}
             maxLength={300}
-            className={`w-full resize-y rounded-xl border px-4 py-3 outline-none transition focus:ring-4 ${
+            className={`w-full resize-y rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4 ${
               content.length > 0 && !contentValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-slate-300 focus:border-blue-500 focus:ring-blue-100'
+                : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
             }`}
           />
 
@@ -254,15 +257,15 @@ export default function CommentForm({
         {error && (
           <div
             role="alert"
-            className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700"
+            className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700"
           >
             {error}
           </div>
         )}
 
         {status === 'success' && (
-          <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-            ส่งความคิดเห็นสำเร็จ
+          <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
+            ส่งข้อความสำเร็จแล้ว ขอบคุณที่ติดต่อเรา
           </div>
         )}
 
@@ -272,9 +275,9 @@ export default function CommentForm({
             !isValid ||
             status === 'sending'
           }
-          className={`w-full rounded-xl px-5 py-3 font-semibold text-white transition ${
+          className={`w-full rounded-2xl px-5 py-3 font-semibold text-white transition ${
             isValid && status !== 'sending'
-              ? 'bg-blue-700 shadow-md hover:-translate-y-0.5 hover:bg-blue-800 hover:shadow-lg'
+              ? 'bg-blue-600 shadow-md hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg'
               : 'cursor-not-allowed bg-slate-300'
           }`}
         >

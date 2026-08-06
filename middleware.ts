@@ -4,13 +4,21 @@ import type { NextRequest } from 'next/server';
 export function middleware(
   request: NextRequest
 ) {
-  const session =
-    request.cookies.get('session');
+  const session = request.cookies.get('session');
+  const { pathname } = request.nextUrl;
 
-  if (!session) {
-    return NextResponse.redirect(
-      new URL('/login', request.url)
-    );
+  if (pathname.startsWith('/login')) {
+    if (session) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+
+    return NextResponse.next();
+  }
+
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/comments')) {
+    if (!session) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
   }
 
   return NextResponse.next();
@@ -18,6 +26,7 @@ export function middleware(
 
 export const config = {
   matcher: [
+    '/login',
     '/dashboard/:path*',
     '/comments/:path*',
   ],
