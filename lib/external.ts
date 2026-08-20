@@ -5,6 +5,21 @@ export interface ExternalItem {
   image?: string;
 }
 
+interface FakeStoreProduct {
+  id: number;
+  title: string;
+  price: number;
+  category: string;
+  image?: string;
+}
+
+interface AlgoliaHit {
+  objectID: string;
+  title?: string;
+  points?: number;
+  author?: string;
+}
+
 export async function fetchExternal(
   source: 'products' | 'news',
 ): Promise<ExternalItem[]> {
@@ -20,9 +35,9 @@ export async function fetchExternal(
       throw new Error('ไม่สามารถโหลดข้อมูลสินค้าได้');
     }
 
-    const items = await response.json();
+    const items: FakeStoreProduct[] = await response.json();
 
-    return items.map((product: any) => ({
+    return items.map((product) => ({
       id: String(product.id),
       title: product.title,
       subtitle: `$${product.price} • ${product.category}`,
@@ -41,9 +56,9 @@ export async function fetchExternal(
     throw new Error('ไม่สามารถโหลดข้อมูลข่าวได้');
   }
 
-  const data = await response.json();
+  const data: { hits?: AlgoliaHit[] } = await response.json();
 
-  return (data.hits ?? []).map((news: any) => ({
+  return (data.hits ?? []).map((news) => ({
     id: String(news.objectID),
     title: news.title || 'ไม่มีชื่อข่าว',
     subtitle: `${news.points ?? 0} คะแนน • โดย ${news.author ?? 'ไม่ทราบชื่อ'}`,

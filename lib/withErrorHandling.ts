@@ -1,12 +1,7 @@
-type Handler = (
-  request: Request,
-  context: any
-) => Promise<Response>;
-
-export function withErrorHandling(
-  handler: Handler
-): Handler {
-  return async (request, context) => {
+export function withErrorHandling<T = unknown>(
+  handler: (request: Request, context: T) => Promise<Response>
+) {
+  return async (request: Request, context: T) => {
     try {
       return await handler(request, context);
     } catch (error) {
@@ -15,8 +10,8 @@ export function withErrorHandling(
       const status =
         error instanceof Error &&
         'status' in error &&
-        typeof error.status === 'number'
-          ? error.status
+        typeof (error as Record<string, unknown>).status === 'number'
+          ? ((error as Record<string, unknown>).status as number)
           : 500;
 
       const message =

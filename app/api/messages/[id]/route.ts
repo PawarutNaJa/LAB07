@@ -3,15 +3,15 @@ import {
   getMessageById,
   removeMessage,
 } from '@/lib/messageService';
-
 import { withErrorHandling } from '@/lib/withErrorHandling';
 
 export const GET = withErrorHandling(
   async (
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
   ) => {
-    const message = getMessageById(params.id);
+    const { id } = await context.params;
+    const message = await getMessageById(id);
 
     return Response.json({
       message,
@@ -22,12 +22,13 @@ export const GET = withErrorHandling(
 export const PATCH = withErrorHandling(
   async (
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
   ) => {
+    const { id } = await context.params;
     const updates = await request.json();
 
-    const updated = editMessage(
-      params.id,
+    const updated = await editMessage(
+      id,
       updates
     );
 
@@ -41,9 +42,10 @@ export const PATCH = withErrorHandling(
 export const DELETE = withErrorHandling(
   async (
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
   ) => {
-    removeMessage(params.id);
+    const { id } = await context.params;
+    await removeMessage(id);
 
     return Response.json(
       {

@@ -1,23 +1,29 @@
 // app/posts/error.tsx
-'use client'; // ← error.tsx ต้องเป็น Client Component เสมอ
-// ✨ TypeScript: กําหนด type ให้props ของ error component
+'use client';
+
 interface ErrorProps {
-    error: Error & { digest?: string };
-    reset: () => void;
+  error: Error & { digest?: string };
+  reset: () => void;
 }
+
 export default function ErrorPage({ error, reset }: ErrorProps) {
-    return (
-        <main className="p-12 text-center">
-            <div className="p-8 bg-red-50 rounded-xl border border-red-200 max-w-md mx-auto">
-                <p className="text-4xl mb-4">❌</p>
-                <h2 className="text-xl font-bold text-red-700 mb-2">เกิดข้อผิดพลาด!</h2>
-                <p className="text-red-600 text-sm mb-4">{error.message}</p>
-                <button
-                    onClick={(): void => reset()}
-                    className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                    ลองอีกครั้ง
-                </button>
-            </div>
-        </main>
-    );
-}
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center p-6 text-center">
+      <div className="w-full max-w-md rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-100 text-2xl text-zinc-900">
+          ⚠️
+        </div>
+        <h2 className="mt-4 text-xl font-bold text-zinc-950">เกิดข้อผิดพลาดในการโหลดข้อมูล</h2>
+        <p className="mt-2 text-sm text-zinc-500">{error.message || 'ไม่สามารถติดต่อกับเซิร์ฟเวอร์ได้ในขณะนี้'}</p>
+        <div className="mt-6">
+          <button
+            onClick={(): void => reset()}
+            className="inline-flex items-center justify-center rounded-xl bg-zinc-950 px-6 py-2.5 text-xs font-semibold text-white shadow-xs transition hover:bg-zinc-800"
+          >
+            ลองใหม่อีกครั้ง
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -50,11 +50,11 @@ export default function CommentForm({
     }
 
     if (content.trim().length < 5) {
-      return 'ความคิดเห็นต้องมีอย่างน้อย 5 ตัวอักษร';
+      return 'ข้อความต้องมีอย่างน้อย 5 ตัวอักษร';
     }
 
     if (content.trim().length > 300) {
-      return 'ความคิดเห็นต้องไม่เกิน 300 ตัวอักษร';
+      return 'ข้อความต้องไม่เกิน 300 ตัวอักษร';
     }
 
     return '';
@@ -99,7 +99,7 @@ export default function CommentForm({
 
       if (!res.ok) {
         setError(
-          data.error ?? 'ส่งความคิดเห็นไม่สำเร็จ'
+          data.error ?? 'ส่งข้อความไม่สำเร็จ'
         );
         setStatus('error');
         return;
@@ -120,28 +120,28 @@ export default function CommentForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_22px_60px_-30px_rgba(37,99,235,0.45)] backdrop-blur-sm"
+      className="overflow-hidden rounded-3xl border border-zinc-200/90 bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]"
     >
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-sky-600 px-6 py-6 text-white">
-        <div className="inline-flex rounded-full bg-white/15 px-3 py-1 text-sm font-medium text-blue-50">
-          📝 แบบฟอร์มภาษาไทย
+      <div className="bg-zinc-950 px-8 py-7 text-white">
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-800/80 px-3 py-0.5 text-xs font-semibold text-zinc-300">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          Direct Message / Contact Form
         </div>
-        <h2 className="mt-3 text-2xl font-semibold">
+        <h2 className="mt-3 text-2xl font-bold tracking-tight">
           ส่งข้อความถึงเรา
         </h2>
-
-        <p className="mt-1 text-sm text-blue-100">
-          กรุณากรอกข้อมูลให้ครบก่อนส่งข้อความ เพื่อให้เราตอบกลับคุณได้อย่างรวดเร็ว
+        <p className="mt-1 text-xs text-zinc-400">
+          กรอกข้อมูลให้ครบถ้วนเพื่อส่งข้อความบันทึกลงระบบฐานข้อมูล
         </p>
       </div>
 
-      <div className="space-y-5 p-6">
+      <div className="space-y-5 p-8">
         <div>
           <label
             htmlFor="comment-name"
-            className="mb-2 block font-semibold text-slate-800"
+            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700"
           >
-            ชื่อผู้แสดงความคิดเห็น
+            ชื่อผู้ติดต่อ
           </label>
 
           <input
@@ -153,15 +153,15 @@ export default function CommentForm({
               resetStatus();
             }}
             placeholder="กรอกชื่อของคุณ"
-            className={`w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4 ${
+            className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:ring-2 ${
               name.length > 0 && !nameValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                : 'border-zinc-200 focus:border-zinc-900 focus:ring-zinc-200'
             }`}
           />
 
           {name.length > 0 && !nameValid && (
-            <p className="mt-1 text-sm text-red-600">
+            <p className="mt-1 text-xs text-red-600">
               ชื่อต้องมีอย่างน้อย 2 ตัวอักษร
             </p>
           )}
@@ -170,7 +170,7 @@ export default function CommentForm({
         <div>
           <label
             htmlFor="comment-email"
-            className="mb-2 block font-semibold text-slate-800"
+            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700"
           >
             อีเมล
           </label>
@@ -184,29 +184,29 @@ export default function CommentForm({
               resetStatus();
             }}
             placeholder="example@email.com"
-            className={`w-full rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4 ${
+            className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:ring-2 ${
               email.length > 0 && !emailValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                : 'border-zinc-200 focus:border-zinc-900 focus:ring-zinc-200'
             }`}
           />
 
-          <div className="mt-1 flex items-center justify-between gap-3">
-            <p className="text-sm text-slate-500">
-              อีเมลใช้สำหรับระบุผู้แสดงความคิดเห็น
+          <div className="mt-1.5 flex items-center justify-between gap-3 text-xs">
+            <p className="text-zinc-400">
+              อีเมลสำหรับติดต่อกลับ
             </p>
 
             {email.length > 0 && (
               <span
-                className={`text-sm font-medium ${
+                className={`font-medium ${
                   emailValid
-                    ? 'text-green-600'
+                    ? 'text-zinc-700'
                     : 'text-red-600'
                 }`}
               >
                 {emailValid
-                  ? 'อีเมลถูกต้อง'
-                  : 'อีเมลไม่ถูกต้อง'}
+                  ? '✓ รูปแบบอีเมลถูกต้อง'
+                  : '✗ รูปแบบอีเมลไม่ถูกต้อง'}
               </span>
             )}
           </div>
@@ -215,9 +215,9 @@ export default function CommentForm({
         <div>
           <label
             htmlFor="comment-content"
-            className="mb-2 block font-semibold text-slate-800"
+            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700"
           >
-            ความคิดเห็น
+            เนื้อหาข้อความ
           </label>
 
           <textarea
@@ -227,45 +227,36 @@ export default function CommentForm({
               setContent(e.target.value);
               resetStatus();
             }}
-            placeholder="เขียนความคิดเห็นเกี่ยวกับโพสต์นี้"
-            rows={6}
+            placeholder="เขียนข้อความหรือข้อเสนอแนะที่ต้องการส่ง..."
+            rows={5}
             maxLength={300}
-            className={`w-full resize-y rounded-2xl border bg-slate-50 px-4 py-3 outline-none transition focus:bg-white focus:ring-4 ${
+            className={`w-full resize-y rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:ring-2 ${
               content.length > 0 && !contentValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-slate-200 focus:border-blue-500 focus:ring-blue-100'
+                : 'border-zinc-200 focus:border-zinc-900 focus:ring-zinc-200'
             }`}
           />
 
-          <div className="mt-1 flex items-center justify-between">
-            <p className="text-sm text-slate-500">
-              อย่างน้อย 5 ตัวอักษร
-            </p>
-
-            <p
-              className={`text-sm ${
-                content.length >= 280
-                  ? 'font-semibold text-orange-600'
-                  : 'text-slate-500'
-              }`}
-            >
+          <div className="mt-1.5 flex items-center justify-between text-xs text-zinc-400">
+            <span>อย่างน้อย 5 ตัวอักษร</span>
+            <span className="font-mono">
               {content.length}/300 ตัวอักษร
-            </p>
+            </span>
           </div>
         </div>
 
         {error && (
           <div
             role="alert"
-            className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700"
+            className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-semibold text-red-700"
           >
             {error}
           </div>
         )}
 
         {status === 'success' && (
-          <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-            ส่งข้อความสำเร็จแล้ว ขอบคุณที่ติดต่อเรา
+          <div className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-xs font-semibold text-zinc-900">
+            ✓ ส่งข้อความสำเร็จแล้ว ข้อความถูกบันทึกเรียบร้อย
           </div>
         )}
 
@@ -275,17 +266,17 @@ export default function CommentForm({
             !isValid ||
             status === 'sending'
           }
-          className={`w-full rounded-2xl px-5 py-3 font-semibold text-white transition ${
+          className={`w-full rounded-xl py-3 text-xs font-bold uppercase tracking-wider text-white transition cursor-pointer ${
             isValid && status !== 'sending'
-              ? 'bg-blue-600 shadow-md hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg'
-              : 'cursor-not-allowed bg-slate-300'
+              ? 'bg-zinc-950 hover:bg-zinc-800 shadow-sm active:scale-[0.99]'
+              : 'cursor-not-allowed bg-zinc-200 text-zinc-400'
           }`}
         >
           {status === 'sending'
-            ? 'กำลังส่งความคิดเห็น...'
-            : 'ส่งความคิดเห็น'}
+            ? 'กำลังส่งข้อความ...'
+            : 'ส่งข้อความทันที →'}
         </button>
       </div>
     </form>
   );
-}
+}

@@ -2,20 +2,19 @@ import {
   createMessage,
   listMessages,
 } from '@/lib/messageService';
-
 import { withErrorHandling } from '@/lib/withErrorHandling';
 
-export async function GET(request: Request) {
+export const GET = withErrorHandling(async (request: Request) => {
   const url = new URL(request.url);
   const search = url.searchParams.get('search') ?? '';
 
-  const allMessages = listMessages();
+  const allMessages = await listMessages();
 
   const filteredMessages = search
     ? allMessages.filter((item) => {
         return (
-          item.name.includes(search) ||
-          item.message.includes(search)
+          item.name.toLowerCase().includes(search.toLowerCase()) ||
+          item.message.toLowerCase().includes(search.toLowerCase())
         );
       })
     : allMessages;
@@ -23,43 +22,41 @@ export async function GET(request: Request) {
   return Response.json({
     messages: filteredMessages,
   });
-}
+});
 
-export const POST = withErrorHandling(
-  async (request: Request) => {
-    const body = await request.json();
+export const POST = withErrorHandling(async (request: Request) => {
+  const body = await request.json();
 
-    const name =
-      typeof body?.name === 'string'
-        ? body.name.trim()
+  const name =
+    typeof body?.name === 'string'
+      ? body.name.trim()
+      : '';
+
+  const email =
+    typeof body?.email === 'string'
+      ? body.email.trim()
+      : '';
+
+  const message =
+    typeof body?.message === 'string'
+      ? body.message.trim()
+      : typeof body?.content === 'string'
+        ? body.content.trim()
         : '';
 
-    const email =
-      typeof body?.email === 'string'
-        ? body.email.trim()
-        : '';
+  const saved = await createMessage({
+    name,
+    email,
+    message,
+  });
 
-    const message =
-      typeof body?.message === 'string'
-        ? body.message.trim()
-        : typeof body?.content === 'string'
-          ? body.content.trim()
-          : '';
-
-    const saved = createMessage({
-      name,
-      email,
-      message,
-    });
-
-    return Response.json(
-      {
-        ok: true,
-        item: saved,
-      },
-      {
-        status: 201,
-      }
-    );
-  }
-);
+  return Response.json(
+    {
+      ok: true,
+      item: saved,
+    },
+    {
+      status: 201,
+    }
+  );
+});

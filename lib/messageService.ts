@@ -1,11 +1,11 @@
 import * as MessageModel from './messages';
-
+import { Prisma } from '@prisma/client';
 import {
   NotFoundError,
   ValidationError,
 } from './errors';
 
-export function createMessage(data: {
+export async function createMessage(data: {
   name: string;
   email: string;
   message: string;
@@ -14,17 +14,25 @@ export function createMessage(data: {
     throw new ValidationError('ข้อมูลไม่ครบ');
   }
 
-  return MessageModel.addMessage(data);
+  try {
+    return await MessageModel.addMessage(data);
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2002'
+    ) {
+      throw new ValidationError('อีเมลนี้ถูกใช้แล้ว');
+    }
+    throw err;
+  }
 }
 
-export function listMessages() {
+export async function listMessages() {
   return MessageModel.getMessages();
 }
 
-export function getMessageById(id: string) {
-  const message = MessageModel.getMessages().find(
-    (item) => item.id === id
-  );
+export async function getMessageById(id: string) {
+  const message = await MessageModel.getMessageById(id);
 
   if (!message) {
     throw new NotFoundError('ไม่พบข้อความนี้');
@@ -33,7 +41,7 @@ export function getMessageById(id: string) {
   return message;
 }
 
-export function editMessage(
+export async function editMessage(
   id: string,
   updates: Partial<{
     name: string;
@@ -50,24 +58,30 @@ export function editMessage(
     );
   }
 
-  const updated = MessageModel.updateMessage(
-    id,
-    updates
-  );
-
-  if (!updated) {
-    throw new NotFoundError('ไม่พบข้อความนี้');
+  try {
+    return await MessageModel.updateMessage(id, updates);
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2025'
+    ) {
+      throw new NotFoundError('ไม่พบข้อความนี้');
+    }
+    throw err;
   }
-
-  return updated;
 }
 
-export function removeMessage(id: string) {
-  const deleted = MessageModel.deleteMessage(id);
-
-  if (!deleted) {
-    throw new NotFoundError('ไม่พบข้อความนี้');
+export async function removeMessage(id: string) {
+  try {
+    await MessageModel.deleteMessage(id);
+    return true;
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2025'
+    ) {
+      throw new NotFoundError('ไม่พบข้อความนี้');
+    }
+    throw err;
   }
-
-  return true;
 }

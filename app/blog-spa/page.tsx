@@ -53,10 +53,6 @@ function BlogSpaContent() {
   const [retryCount, setRetryCount] =
     useState<number>(0);
 
-  /*
-   * เปลี่ยนข้อมูลในหน้าให้ตรงกับ URL
-   * เมื่อกดย้อนกลับหรือเดินหน้าในเบราว์เซอร์
-   */
   useEffect(() => {
     setSource(sourceFromUrl);
     setKeyword(keywordFromUrl);
@@ -67,10 +63,6 @@ function BlogSpaContent() {
     selectedIdFromUrl,
   ]);
 
-  /*
-   * โหลดข้อมูลเมื่อเปลี่ยนหมวด
-   * หรือเมื่อกดปุ่มลองใหม่
-   */
   useEffect(() => {
     const controller = new AbortController();
 
@@ -132,10 +124,6 @@ function BlogSpaContent() {
     };
   }, [source, retryCount]);
 
-  /*
-   * กรองข้อมูลจากรายการที่โหลดมาแล้ว
-   * จึงไม่เรียก API ใหม่ตอนพิมพ์ค้นหา
-   */
   const filteredItems = useMemo(() => {
     const searchText =
       keyword.trim().toLowerCase();
@@ -158,9 +146,6 @@ function BlogSpaContent() {
     });
   }, [items, keyword]);
 
-  /*
-   * หารายการที่ผู้ใช้กดเลือก
-   */
   const selectedItem = useMemo(() => {
     if (selectedId === null) {
       return null;
@@ -174,9 +159,6 @@ function BlogSpaContent() {
     );
   }, [items, selectedId]);
 
-  /*
-   * สร้าง URL จากค่าปัจจุบัน
-   */
   function createUrl(
     nextSource: Source,
     nextKeyword: string,
@@ -197,9 +179,6 @@ function BlogSpaContent() {
     return `/blog-spa?${params.toString()}`;
   }
 
-  /*
-   * เปลี่ยนหมวดสินค้าและข่าว
-   */
   function selectSource(nextSource: Source) {
     setSource(nextSource);
     setSelectedId(null);
@@ -209,9 +188,6 @@ function BlogSpaContent() {
     );
   }
 
-  /*
-   * ค้นหาข้อมูล
-   */
   function handleSearch(
     event: ChangeEvent<HTMLInputElement>,
   ) {
@@ -225,9 +201,6 @@ function BlogSpaContent() {
     );
   }
 
-  /*
-   * เปิดรายละเอียด
-   */
   function openDetail(itemId: string) {
     setSelectedId(itemId);
 
@@ -236,9 +209,6 @@ function BlogSpaContent() {
     );
   }
 
-  /*
-   * ปิดรายละเอียด
-   */
   function closeDetail() {
     setSelectedId(null);
 
@@ -247,9 +217,6 @@ function BlogSpaContent() {
     );
   }
 
-  /*
-   * ล้างคำค้นหา
-   */
   function clearSearch() {
     setKeyword('');
     setSelectedId(null);
@@ -260,195 +227,167 @@ function BlogSpaContent() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
-      <div className="mx-auto max-w-6xl">
-        <h1 className="mb-2 text-3xl font-bold text-blue-900">
-          Blog Aggregator
-        </h1>
-
-        <p className="mb-6 text-gray-500">
-          ค้นหาและดูรายละเอียดโดยไม่ต้องโหลดหน้าใหม่
-        </p>
-
-        {/* ปุ่มเลือกหมวด */}
-        <div className="mb-6 flex gap-3">
-          <button
-            type="button"
-            onClick={() =>
-              selectSource('products')
-            }
-            className={`rounded-lg px-5 py-2 font-medium transition ${
-              source === 'products'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 shadow-sm hover:bg-gray-100'
-            }`}
-          >
-            สินค้า
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              selectSource('news')
-            }
-            className={`rounded-lg px-5 py-2 font-medium transition ${
-              source === 'news'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 shadow-sm hover:bg-gray-100'
-            }`}
-          >
-            ข่าว
-          </button>
-        </div>
-
-        {/* ช่องค้นหา */}
-        <div className="mb-6">
-          <label
-            htmlFor="search"
-            className="mb-2 block font-medium text-gray-700"
-          >
-            ค้นหารายการ
-          </label>
-
-          <input
-            id="search"
-            type="search"
-            value={keyword}
-            onChange={handleSearch}
-            placeholder="พิมพ์ชื่อหรือรายละเอียด..."
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-          />
-
-          {!isLoading && !error && (
-            <p className="mt-2 text-sm text-gray-500">
-              พบ {filteredItems.length} รายการ
-            </p>
-          )}
-        </div>
-
-        {/* กำลังโหลด */}
-        {isLoading && (
-          <div className="rounded-xl border bg-white p-10 text-center shadow-sm">
-            <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600" />
-
-            <p className="text-gray-500">
-              กำลังโหลดข้อมูล...
-            </p>
+    <div className="space-y-8">
+      {/* Header Banner */}
+      <section className="relative overflow-hidden rounded-3xl border border-zinc-200/90 bg-white p-8 sm:p-12 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-100/80 px-3 py-0.5 text-xs font-semibold text-zinc-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-zinc-900" />
+            Client-Side Aggregator
           </div>
-        )}
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950">
+            Blog Aggregator & SPA Feed
+          </h1>
+          <p className="text-sm sm:text-base text-zinc-500 max-w-2xl">
+            ดึงข้อมูลจากภายนอก (FakeStore / Hacker News) ผ่าน Next.js API Routes พร้อมระบบค้นหาและเปิดดูรายละเอียดแบบ Single Page Application
+          </p>
+        </div>
 
-        {/* เกิดข้อผิดพลาด */}
-        {!isLoading && error && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-8 text-center">
-            <h2 className="text-lg font-bold text-red-700">
-              เกิดข้อผิดพลาด
-            </h2>
-
-            <p className="mt-2 text-red-600">
-              {error}
-            </p>
+        {/* Source Toggle Pills & Search */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-between sm:items-center border-t border-zinc-100 pt-6">
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => selectSource('products')}
+              className={`rounded-full px-5 py-2 text-xs font-semibold shadow-xs transition-all cursor-pointer ${
+                source === 'products'
+                  ? 'bg-zinc-950 text-white'
+                  : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950'
+              }`}
+            >
+              🛍️ สินค้า (Products)
+            </button>
 
             <button
               type="button"
-              onClick={() =>
-                setRetryCount(
-                  (count) => count + 1,
-                )
-              }
-              className="mt-4 rounded-lg bg-red-600 px-5 py-2 text-white hover:bg-red-700"
+              onClick={() => selectSource('news')}
+              className={`rounded-full px-5 py-2 text-xs font-semibold shadow-xs transition-all cursor-pointer ${
+                source === 'news'
+                  ? 'bg-zinc-950 text-white'
+                  : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950'
+              }`}
             >
-              ลองใหม่
+              📰 ข่าวไอที (Tech News)
             </button>
           </div>
-        )}
 
-        {/* ไม่มีข้อมูลจาก API */}
-        {!isLoading &&
-          !error &&
-          items.length === 0 && (
-            <div className="rounded-xl border bg-white p-10 text-center shadow-sm">
-              <p className="font-medium text-gray-700">
-                ไม่มีข้อมูลในหมวดนี้
-              </p>
-            </div>
-          )}
+          <div className="relative w-full sm:w-80">
+            <input
+              id="search"
+              type="search"
+              value={keyword}
+              onChange={handleSearch}
+              placeholder="ค้นหาชื่อหรือเนื้อหา..."
+              className="w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-2 text-xs text-zinc-900 outline-none transition focus:border-zinc-900 focus:bg-white focus:ring-2 focus:ring-zinc-200"
+            />
+          </div>
+        </div>
+      </section>
 
-        {/* ค้นหาแล้วไม่พบ */}
-        {!isLoading &&
-          !error &&
-          items.length > 0 &&
-          filteredItems.length === 0 && (
-            <div className="rounded-xl border bg-white p-10 text-center shadow-sm">
-              <p className="font-medium text-gray-700">
-                ไม่พบผลการค้นหา “{keyword}”
-              </p>
+      {/* Loading State */}
+      {isLoading && (
+        <div className="rounded-3xl border border-zinc-200/80 bg-white p-12 text-center shadow-xs">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-3 border-zinc-200 border-t-zinc-900" />
+          <p className="text-xs font-semibold text-zinc-500">
+            กำลังโหลดข้อมูลจาก External API...
+          </p>
+        </div>
+      )}
 
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="mt-4 rounded-lg bg-gray-200 px-5 py-2 text-gray-800 hover:bg-gray-300"
-              >
-                ล้างคำค้นหา
-              </button>
-            </div>
-          )}
+      {/* Error State */}
+      {!isLoading && error && (
+        <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center">
+          <h2 className="text-sm font-bold text-red-800">
+            เกิดข้อผิดพลาดในการโหลดข้อมูล
+          </h2>
+          <p className="mt-1 text-xs text-red-600">
+            {error}
+          </p>
+          <button
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+            className="mt-4 inline-flex rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white hover:bg-red-700 cursor-pointer"
+          >
+            ลองใหม่อีกครั้ง
+          </button>
+        </div>
+      )}
 
-        {/* รายการสินค้าและข่าว */}
-        {!isLoading &&
-          !error &&
-          filteredItems.length > 0 && (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredItems.map((item) => (
-                <button
-                  type="button"
-                  key={item.id}
-                  onClick={() =>
-                    openDetail(String(item.id))
-                  }
-                  className="overflow-hidden rounded-xl border bg-white text-left shadow-sm transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg"
-                >
-                  {/* แสดงรูปสินค้าจาก API */}
-                  {item.image ? (
-                    <div className="flex h-56 items-center justify-center bg-white p-5">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="h-full w-full object-contain"
-                      />
-                    </div>
-                  ) : (
-                    /*
-                     * ข่าวจาก Hacker News ไม่มีรูป
-                     * จึงแสดงกล่องแทนรูป
-                     */
-                    <div className="flex h-44 items-center justify-center bg-blue-50 text-5xl">
-                      📰
-                    </div>
-                  )}
+      {/* Empty State */}
+      {!isLoading && !error && items.length === 0 && (
+        <div className="rounded-3xl border border-zinc-200/80 bg-white p-12 text-center shadow-xs">
+          <p className="text-sm font-semibold text-zinc-800">
+            ไม่มีข้อมูลในหมวดนี้
+          </p>
+        </div>
+      )}
 
-                  <div className="p-5">
-                    <h2 className="line-clamp-2 text-lg font-bold text-blue-900">
-                      {item.title}
-                    </h2>
+      {/* Search Not Found State */}
+      {!isLoading && !error && items.length > 0 && filteredItems.length === 0 && (
+        <div className="rounded-3xl border border-dashed border-zinc-200 bg-white p-12 text-center shadow-xs">
+          <p className="text-sm font-semibold text-zinc-800">
+            ไม่พบผลการค้นหา “{keyword}”
+          </p>
+          <button
+            type="button"
+            onClick={clearSearch}
+            className="mt-4 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100 cursor-pointer"
+          >
+            ล้างคำค้นหา
+          </button>
+        </div>
+      )}
 
-                    <p className="mt-2 text-sm text-gray-500">
-                      {item.subtitle ||
-                        'ไม่มีรายละเอียด'}
-                    </p>
-
-                    <span className="mt-4 inline-block text-sm font-medium text-blue-600">
-                      ดูรายละเอียด →
-                    </span>
+      {/* Grid of Items */}
+      {!isLoading && !error && filteredItems.length > 0 && (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filteredItems.map((item) => (
+            <button
+              type="button"
+              key={item.id}
+              onClick={() => openDetail(String(item.id))}
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200/80 bg-white text-left shadow-xs transition duration-200 hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-sm cursor-pointer"
+            >
+              <div>
+                {item.image ? (
+                  <div className="flex h-48 items-center justify-center bg-white p-5 border-b border-zinc-100">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="h-full w-full object-contain transition duration-200 group-hover:scale-105"
+                    />
                   </div>
-                </button>
-              ))}
-            </div>
-          )}
-      </div>
+                ) : (
+                  <div className="flex h-36 items-center justify-center bg-zinc-50 text-4xl border-b border-zinc-100">
+                    📰
+                  </div>
+                )}
 
-      {/* หน้าต่างรายละเอียด */}
+                <div className="p-5">
+                  <span className="font-mono text-[11px] text-zinc-400">
+                    #{item.id}
+                  </span>
+                  <h2 className="mt-1 line-clamp-2 text-sm font-bold text-zinc-900 group-hover:text-zinc-950 transition">
+                    {item.title}
+                  </h2>
+                  <p className="mt-1.5 line-clamp-2 text-xs text-zinc-500 leading-relaxed">
+                    {item.subtitle || 'ไม่มีรายละเอียด'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="border-t border-zinc-100 px-5 py-3 text-xs font-semibold text-zinc-900 flex items-center justify-between">
+                <span>{source === 'products' ? 'ดูสินค้า' : 'อ่านข่าว'}</span>
+                <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Slide-over Detail Drawer */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/50">
+        <div className="fixed inset-0 z-50 flex justify-end bg-zinc-950/40 backdrop-blur-xs">
           <button
             type="button"
             aria-label="ปิดรายละเอียด"
@@ -456,24 +395,26 @@ function BlogSpaContent() {
             className="absolute inset-0 cursor-default"
           />
 
-          <aside className="relative z-10 h-full w-full max-w-lg overflow-y-auto bg-white p-6 shadow-2xl">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-blue-900">
-                รายละเอียด
-              </h2>
+          <aside className="relative z-10 h-full w-full max-w-lg overflow-y-auto bg-white p-6 sm:p-8 shadow-2xl border-l border-zinc-200">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-5">
+              <div className="flex items-center gap-2">
+                <span className="flex h-2 w-2 rounded-full bg-zinc-900" />
+                <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-950">
+                  รายละเอียดข้อมูล
+                </h2>
+              </div>
 
               <button
                 type="button"
                 onClick={closeDetail}
-                className="rounded-lg bg-gray-200 px-4 py-2 text-gray-800 hover:bg-gray-300"
+                className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 cursor-pointer"
               >
-                ปิด
+                ปิด ✕
               </button>
             </div>
 
-            {/* รูปในหน้ารายละเอียด */}
             {selectedItem.image ? (
-              <div className="mb-6 flex h-72 items-center justify-center rounded-xl border bg-white p-6">
+              <div className="my-6 flex h-64 items-center justify-center rounded-2xl border border-zinc-100 bg-white p-6">
                 <img
                   src={selectedItem.image}
                   alt={selectedItem.title}
@@ -481,33 +422,32 @@ function BlogSpaContent() {
                 />
               </div>
             ) : (
-              <div className="mb-6 flex h-52 items-center justify-center rounded-xl bg-blue-50 text-7xl">
+              <div className="my-6 flex h-40 items-center justify-center rounded-2xl bg-zinc-50 text-5xl">
                 📰
               </div>
             )}
 
-            <p className="mb-2 text-sm font-medium text-blue-600">
-              {source === 'products'
-                ? 'สินค้า'
-                : 'ข่าว'}
-            </p>
+            <div className="space-y-4">
+              <span className="inline-block rounded-full bg-zinc-100 px-3 py-1 font-mono text-xs font-semibold text-zinc-800">
+                {source === 'products' ? 'PRODUCT ITEM' : 'NEWS ITEM'}
+              </span>
 
-            <h3 className="text-2xl font-bold text-gray-900">
-              {selectedItem.title}
-            </h3>
+              <h3 className="text-xl font-bold text-zinc-950">
+                {selectedItem.title}
+              </h3>
 
-            <p className="mt-4 leading-7 text-gray-600">
-              {selectedItem.subtitle ||
-                'ไม่มีรายละเอียดเพิ่มเติม'}
-            </p>
+              <div className="rounded-2xl border border-zinc-100 bg-zinc-50/70 p-5 text-sm leading-relaxed text-zinc-700">
+                {selectedItem.subtitle || 'ไม่มีรายละเอียดเพิ่มเติม'}
+              </div>
 
-            <p className="mt-8 text-xs text-gray-400">
-              รหัสรายการ: {selectedItem.id}
-            </p>
+              <p className="font-mono text-xs text-zinc-400 pt-4">
+                Identifier: {selectedItem.id}
+              </p>
+            </div>
           </aside>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 
@@ -515,16 +455,14 @@ export default function BlogSpaPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-gray-50 p-8">
-          <div className="mx-auto max-w-6xl rounded-xl bg-white p-10 text-center">
-            <p className="text-gray-500">
-              กำลังเตรียมหน้า...
-            </p>
-          </div>
-        </main>
+        <div className="rounded-3xl border border-zinc-200 bg-white p-12 text-center">
+          <p className="text-xs text-zinc-500 font-semibold">
+            กำลังเตรียมหน้า SPA Feed...
+          </p>
+        </div>
       }
     >
       <BlogSpaContent />
     </Suspense>
   );
-}
+}

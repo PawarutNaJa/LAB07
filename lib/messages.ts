@@ -1,62 +1,53 @@
+import { prisma } from './prisma';
+
 export interface ContactMessage {
   id: string;
   name: string;
   email: string;
   message: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
-// เก็บข้อมูลไว้ในหน่วยความจำชั่วคราว
-const messages: ContactMessage[] = [];
-
-export function addMessage(
-  data: Omit<ContactMessage, "id" | "createdAt">
-) {
-  const item: ContactMessage = {
-    id: crypto.randomUUID(),
-    createdAt: new Date().toISOString(),
-    ...data,
-  };
-
-  messages.push(item);
-
-  return item;
+export async function addMessage(data: {
+  name: string;
+  email: string;
+  message: string;
+}) {
+  return prisma.message.create({
+    data,
+  });
 }
 
-export function getMessages() {
-  return messages;
+export async function getMessages() {
+  return prisma.message.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
 }
 
-export function updateMessage(
+export async function getMessageById(id: string) {
+  return prisma.message.findUnique({
+    where: { id },
+  });
+}
+
+export async function updateMessage(
   id: string,
-  updates: Partial<ContactMessage>
-) {
-  const index = messages.findIndex(
-    (item) => item.id === id
-  );
-
-  if (index === -1) {
-    return null;
+  updates: {
+    message?: string;
+    name?: string;
+    email?: string;
   }
-
-  messages[index] = {
-    ...messages[index],
-    ...updates,
-  };
-
-  return messages[index];
+) {
+  return prisma.message.update({
+    where: { id },
+    data: updates,
+  });
 }
 
-export function deleteMessage(id: string) {
-  const index = messages.findIndex(
-    (item) => item.id === id
-  );
-
-  if (index === -1) {
-    return false;
-  }
-
-  messages.splice(index, 1);
-
-  return true;
+export async function deleteMessage(id: string) {
+  return prisma.message.delete({
+    where: { id },
+  });
 }

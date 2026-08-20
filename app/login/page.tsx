@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,36 +38,39 @@ export default function LoginPage() {
 
       router.replace('/dashboard');
       router.refresh();
-    } catch (err) {
-      setError('เกิดข้อผิดพลาด');
+    } catch {
+      setError('เกิดข้อผิดพลาดในการเชื่อมต่อ');
       setLoading(false);
     }
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.16),_transparent_45%)] px-4 py-10">
-      <div className="w-full max-w-md overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_30px_80px_-35px_rgba(37,99,235,0.45)] backdrop-blur-sm">
-        <div className="bg-gradient-to-r from-blue-700 to-indigo-700 px-8 py-7 text-white">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-100">
-            My Blog
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold">
-            เข้าสู่ระบบ
+    <div className="flex min-h-[75vh] items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md overflow-hidden rounded-3xl border border-zinc-200/90 bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]">
+        {/* Header */}
+        <div className="bg-zinc-950 px-8 py-8 text-white">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-800/80 px-3 py-0.5 text-xs font-semibold text-zinc-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+            Security & Authentication
+          </div>
+          <h1 className="mt-4 text-2xl sm:text-3xl font-extrabold tracking-tight">
+            เข้าสู่ระบบ (Sign In)
           </h1>
-          <p className="mt-2 text-sm text-blue-100">
-            ใช้บัญชีของคุณเพื่อดู Dashboard และจัดการข้อมูล
+          <p className="mt-1.5 text-xs text-zinc-400">
+            ใช้บัญชีแอดมินเพื่อเข้าสู่ Dashboard และจัดการข้อมูล
           </p>
         </div>
 
+        {/* Form Body */}
         <form onSubmit={handleSubmit} className="space-y-5 p-8">
           <div>
-            <label className="mb-2 block text-sm font-semibold text-slate-700">
-              อีเมล
+            <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700">
+              อีเมลบัญชีผู้ใช้
             </label>
             <input
               type="email"
-              placeholder="name@example.com"
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+              placeholder="admin@example.com"
+              className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -74,13 +78,13 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-slate-700">
+            <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700">
               รหัสผ่าน
             </label>
             <input
               type="password"
               placeholder="••••••••"
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+              className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-200"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -88,7 +92,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="rounded-2xl border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-600">
+            <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-semibold text-red-700">
               {error}
             </div>
           )}
@@ -96,12 +100,21 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="w-full rounded-xl bg-zinc-950 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-400 cursor-pointer active:scale-[0.99]"
           >
-            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
+            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบทันที →'}
           </button>
+
+          <div className="border-t border-zinc-100 pt-4 text-center">
+            <Link
+              href="/"
+              className="text-xs text-zinc-500 hover:text-zinc-950 hover:underline"
+            >
+              ← กลับสู่หน้าแรก
+            </Link>
+          </div>
         </form>
       </div>
-    </main>
+    </div>
   );
-}
+}

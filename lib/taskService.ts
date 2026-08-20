@@ -1,11 +1,11 @@
 import * as TaskModel from './tasks';
-
+import { Prisma } from '@prisma/client';
 import {
   NotFoundError,
   ValidationError,
 } from './errors';
 
-export function createTask(data: {
+export async function createTask(data: {
   title: string;
   completed?: boolean;
 }) {
@@ -26,12 +26,12 @@ export function createTask(data: {
   });
 }
 
-export function listTasks() {
+export async function listTasks() {
   return TaskModel.getTasks();
 }
 
-export function findTaskById(id: string) {
-  const task = TaskModel.getTaskById(id);
+export async function findTaskById(id: string) {
+  const task = await TaskModel.getTaskById(id);
 
   if (!task) {
     throw new NotFoundError('ไม่พบงานนี้');
@@ -40,7 +40,7 @@ export function findTaskById(id: string) {
   return task;
 }
 
-export function editTask(
+export async function editTask(
   id: string,
   updates: Partial<{
     title: string;
@@ -65,24 +65,33 @@ export function editTask(
     );
   }
 
-  const updated = TaskModel.updateTask(
-    id,
-    updates
-  );
-
-  if (!updated) {
-    throw new NotFoundError('ไม่พบงานนี้');
+  try {
+    return await TaskModel.updateTask(
+      id,
+      updates
+    );
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2025'
+    ) {
+      throw new NotFoundError('ไม่พบงานนี้');
+    }
+    throw err;
   }
-
-  return updated;
 }
 
-export function removeTask(id: string) {
-  const deleted = TaskModel.deleteTask(id);
-
-  if (!deleted) {
-    throw new NotFoundError('ไม่พบงานนี้');
+export async function removeTask(id: string) {
+  try {
+    await TaskModel.deleteTask(id);
+    return true;
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === 'P2025'
+    ) {
+      throw new NotFoundError('ไม่พบงานนี้');
+    }
+    throw err;
   }
-
-  return true;
 }

@@ -67,162 +67,148 @@ export default function CommentsPage() {
   }, [loadComments]);
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-10">
-      <div className="mx-auto max-w-4xl">
-        <section className="mb-8 overflow-hidden rounded-2xl bg-white shadow-lg">
-          <div className="bg-gradient-to-r from-blue-800 to-indigo-800 px-7 py-8 text-white">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-blue-200">
-              Blog Aggregator Workshop
+    <div className="space-y-8">
+      {/* Header Banner */}
+      <section className="relative overflow-hidden rounded-3xl border border-zinc-200/90 bg-white p-8 sm:p-12 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-100/80 px-3 py-0.5 text-xs font-semibold text-zinc-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-zinc-900" />
+            Comments & Discussion
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950">
+            ระบบความคิดเห็น (Comments)
+          </h1>
+          <p className="text-sm sm:text-base text-zinc-500 max-w-2xl">
+            ตัวอย่างระบบความคิดเห็นและการส่งข้อมูลผ่าน API แบบเรียลไทม์ เชื่อมต่อกับ Next.js API Routes และ Layered Service
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 border-t border-zinc-100 pt-6 sm:grid-cols-3">
+          <div className="rounded-2xl border border-zinc-100 bg-zinc-50/80 p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-zinc-800">
+              Controlled Form
             </p>
-
-            <h1 className="text-3xl font-bold md:text-4xl">
-              การพัฒนา Web Application ด้วย Next.js
-            </h1>
-
-            <p className="mt-4 max-w-3xl leading-7 text-blue-100">
-              หน้านี้เป็นตัวอย่างระบบความคิดเห็น
-              ผู้ใช้งานต้องเข้าสู่ระบบก่อนจึงจะเปิดหน้าและส่งความคิดเห็นได้
+            <p className="mt-1 text-xs text-zinc-500">
+              จัดการ Input State ด้วย React Hooks
             </p>
           </div>
 
-          <div className="grid gap-4 border-t border-slate-200 p-6 text-sm text-slate-600 md:grid-cols-3">
-            <div className="rounded-xl bg-slate-50 p-4">
-              <p className="font-semibold text-slate-800">
-                Controlled Form
-              </p>
-              <p className="mt-1">
-                ควบคุมค่าด้วย useState
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-slate-50 p-4">
-              <p className="font-semibold text-slate-800">
-                POST API
-              </p>
-              <p className="mt-1">
-                ส่งข้อมูลไปยัง Server จริง
-              </p>
-            </div>
-
-            <div className="rounded-xl bg-slate-50 p-4">
-              <p className="font-semibold text-slate-800">
-                Authentication
-              </p>
-              <p className="mt-1">
-                ป้องกันหน้าด้วย Cookie
-              </p>
-            </div>
+          <div className="rounded-2xl border border-zinc-100 bg-zinc-50/80 p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-zinc-800">
+              RESTful Endpoint
+            </p>
+            <p className="mt-1 text-xs text-zinc-500">
+              ส่งและรับข้อมูลผ่าน JSON API
+            </p>
           </div>
-        </section>
 
-        <section className="mb-8">
+          <div className="rounded-2xl border border-zinc-100 bg-zinc-50/80 p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-zinc-800">
+              Session Validation
+            </p>
+            <p className="mt-1 text-xs text-zinc-500">
+              ตรวจสอบสิทธิ์การใช้งานผ่าน Cookie
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Form and List Grid */}
+      <div className="grid gap-8 lg:grid-cols-[1.1fr_1.4fr] lg:items-start">
+        <div>
           <CommentForm
             postId={POST_ID}
             onCommentAdded={loadComments}
           />
-        </section>
+        </div>
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        {/* Comments Feed */}
+        <section className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 pb-4">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-zinc-950">
                 ความคิดเห็นทั้งหมด
               </h2>
-
-              <p className="mt-1 text-sm text-slate-500">
-                ความคิดเห็นล่าสุดจะแสดงอยู่ด้านบน
+              <p className="text-xs text-zinc-400">
+                แสดงผลเรียงจากใหม่ไปเก่า
               </p>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-blue-100 px-4 py-2 font-semibold text-blue-700">
-                {comments.length} ความคิดเห็น
+              <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 font-mono text-xs font-bold text-zinc-800">
+                {comments.length} รายการ
               </span>
 
               <button
                 type="button"
                 onClick={loadComments}
                 disabled={loading}
-                className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl border border-zinc-200 bg-white px-3 py-1 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:opacity-50 cursor-pointer"
               >
-                โหลดใหม่
+                ↻ โหลดใหม่
               </button>
             </div>
           </div>
 
           {loading && (
-            <div className="rounded-xl bg-slate-50 p-5 text-center text-slate-500">
-              กำลังโหลดความคิดเห็น...
+            <div className="rounded-2xl border border-zinc-100 bg-zinc-50 p-6 text-center text-xs text-zinc-500">
+              กำลังโหลดข้อมูลความคิดเห็น...
             </div>
           )}
 
           {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-xs font-semibold text-red-700">
               {error}
             </div>
           )}
 
-          {!loading &&
-            !error &&
-            comments.length === 0 && (
-              <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-                <p className="text-lg font-semibold text-slate-700">
-                  ยังไม่มีความคิดเห็น
-                </p>
+          {!loading && !error && comments.length === 0 && (
+            <div className="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50/50 p-8 text-center">
+              <p className="text-sm font-semibold text-zinc-800">
+                ยังไม่มีความคิดเห็นในระบบ
+              </p>
+              <p className="mt-1 text-xs text-zinc-500">
+                เป็นคนแรกที่ส่งความคิดเห็นผ่านฟอร์มด้านข้างได้เลย
+              </p>
+            </div>
+          )}
 
-                <p className="mt-1 text-slate-500">
-                  เริ่มแสดงความคิดเห็นเป็นคนแรกได้เลย
-                </p>
-              </div>
-            )}
-
-          {!loading &&
-            comments.length > 0 && (
-              <div className="space-y-4">
-                {comments.map((comment) => (
-                  <article
-                    key={comment.id}
-                    className="rounded-2xl border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-md"
-                  >
-                    <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl font-bold text-blue-700">
-                          {comment.name
-                            .charAt(0)
-                            .toUpperCase()}
-                        </div>
-
-                        <div>
-                          <h3 className="font-bold text-slate-900">
-                            {comment.name}
-                          </h3>
-
-                          <p className="text-sm text-slate-500">
-                            {comment.email}
-                          </p>
-                        </div>
+          {!loading && comments.length > 0 && (
+            <div className="space-y-3">
+              {comments.map((comment) => (
+                <article
+                  key={comment.id}
+                  className="rounded-2xl border border-zinc-200/80 bg-white p-4 shadow-xs transition hover:border-zinc-300"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-950 text-xs font-bold text-white">
+                        {comment.name.charAt(0).toUpperCase()}
                       </div>
-
-                      <time className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-500">
-                        {new Date(
-                          comment.createdAt
-                        ).toLocaleString(
-                          'th-TH'
-                        )}
-                      </time>
+                      <div>
+                        <h3 className="font-bold text-zinc-900 text-xs">
+                          {comment.name}
+                        </h3>
+                        <p className="text-[11px] text-zinc-400">
+                          {comment.email}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="rounded-xl bg-slate-50 p-4">
-                      <p className="whitespace-pre-wrap leading-7 text-slate-700">
-                        {comment.content}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
+                    <time className="font-mono text-[11px] text-zinc-400">
+                      {new Date(comment.createdAt).toLocaleString('th-TH')}
+                    </time>
+                  </div>
+
+                  <div className="mt-3 rounded-xl border border-zinc-100 bg-zinc-50/70 p-3 text-xs leading-relaxed text-zinc-700 whitespace-pre-wrap">
+                    {comment.content}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
       </div>
-    </main>
+    </div>
   );
-}
+}

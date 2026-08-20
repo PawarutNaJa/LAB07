@@ -4,11 +4,14 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-const links = [
+const primaryLinks = [
+  { href: '/', label: 'หน้าแรก' },
   { href: '/posts', label: 'บทความ' },
-  { href: '/users', label: 'ผู้ใช้' },
-  { href: '/about', label: 'เกี่ยวกับ' },
-  { href: '/contact', label: 'ติดต่อ' },
+  { href: '/users', label: 'ผู้ใช้งาน' },
+  { href: '/blog-spa', label: 'SPA Feed' },
+  { href: '/courses', label: 'รายวิชา' },
+  { href: '/about', label: 'เกี่ยวกับเรา' },
+  { href: '/contact', label: 'ติดต่อเรา' },
   { href: '/dashboard', label: 'Dashboard' },
 ];
 
@@ -17,6 +20,7 @@ export default function Navbar() {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   async function fetchSession() {
     try {
@@ -40,6 +44,7 @@ export default function Navbar() {
 
   useEffect(() => {
     fetchSession();
+    setMobileMenuOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -64,7 +69,7 @@ export default function Navbar() {
         method: 'POST',
       });
     } catch {
-      // ignore and still clear local state
+      // ignore
     }
 
     setLoggedIn(false);
@@ -73,57 +78,123 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-xl sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-6">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/90 bg-white/85 backdrop-blur-md transition-colors">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        {/* Brand Logo */}
+        <div className="flex items-center gap-6 lg:gap-8">
           <Link
             href="/"
-            className="text-xl font-semibold tracking-wide text-slate-900 transition-colors hover:text-blue-600"
+            className="group flex items-center gap-2.5 transition"
           >
-            My Blog
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-950 text-xs font-black tracking-tighter text-white shadow-sm transition group-hover:scale-105">
+              MB
+            </span>
+            <span className="font-mono text-sm font-bold tracking-wider text-zinc-950">
+              MYBLOG<span className="text-zinc-400">.</span>
+            </span>
           </Link>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-slate-600">
-            {links.map((link) => {
+          {/* Navigation links - Desktop */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {primaryLinks.map((link) => {
               const isActive = pathname === link.href;
 
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`transition-colors hover:text-blue-600 ${
-                    isActive ? 'text-blue-600' : 'text-slate-600'
+                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-150 ${
+                    isActive
+                      ? 'bg-zinc-950 text-white shadow-xs'
+                      : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950'
                   }`}
                 >
                   {link.label}
                 </Link>
               );
             })}
-          </div>
+          </nav>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Action Buttons & Mobile Toggle */}
+        <div className="flex items-center gap-2">
           <Link
             href="/login"
-            className="rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+            className="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-800 shadow-xs transition hover:border-zinc-300 hover:bg-zinc-50"
           >
-            Login
+            เข้าสู่ระบบ
           </Link>
 
           <button
             type="button"
             onClick={handleLogout}
             disabled={!loggedIn && !loading}
-            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+            className={`inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
               loggedIn
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                ? 'bg-zinc-950 text-white shadow-xs hover:bg-zinc-800 cursor-pointer'
+                : 'cursor-not-allowed bg-zinc-100 text-zinc-400'
             } ${loading ? 'opacity-70' : ''}`}
           >
-            Logout
+            ออกจากระบบ
+          </button>
+
+          {/* Mobile hamburger button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 text-zinc-700 hover:bg-zinc-100 lg:hidden"
+            aria-label="Toggle menu"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {mobileMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
           </button>
         </div>
       </div>
-    </nav>
+
+      {/* Mobile navigation drawer */}
+      {mobileMenuOpen && (
+        <div className="border-t border-zinc-200 bg-white px-4 py-3 lg:hidden">
+          <nav className="flex flex-col gap-1">
+            {primaryLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`rounded-lg px-3 py-2 text-sm font-medium ${
+                    isActive
+                      ? 'bg-zinc-950 text-white'
+                      : 'text-zinc-700 hover:bg-zinc-100'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
+    </header>
   );
 }
+

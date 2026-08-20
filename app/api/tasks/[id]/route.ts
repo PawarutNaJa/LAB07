@@ -3,15 +3,15 @@ import {
   findTaskById,
   removeTask,
 } from '@/lib/taskService';
-
 import { withErrorHandling } from '@/lib/withErrorHandling';
 
 export const GET = withErrorHandling(
   async (
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
   ) => {
-    const task = findTaskById(params.id);
+    const { id } = await context.params;
+    const task = await findTaskById(id);
 
     return Response.json({
       task,
@@ -22,11 +22,12 @@ export const GET = withErrorHandling(
 export const PATCH = withErrorHandling(
   async (
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
   ) => {
+    const { id } = await context.params;
     const body = await request.json();
 
-    const updated = editTask(params.id, {
+    const updated = await editTask(id, {
       title: body?.title,
       completed: body?.completed,
     });
@@ -41,9 +42,10 @@ export const PATCH = withErrorHandling(
 export const DELETE = withErrorHandling(
   async (
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
   ) => {
-    removeTask(params.id);
+    const { id } = await context.params;
+    await removeTask(id);
 
     return Response.json(
       {
