@@ -6,5 +6,6 @@ export async function GET() {
 
   return Response.json({
     loggedIn: Boolean(session),
+    userId: session || null,
   });
 }

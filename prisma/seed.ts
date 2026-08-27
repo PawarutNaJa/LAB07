@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma';
+import bcrypt from 'bcrypt';
 
 async function main() {
   console.log('🌱 เริ่มต้นการ Seed ข้อมูล...');
@@ -18,6 +19,22 @@ async function main() {
       { title: 'ออกแบบ Layered Architecture (Controller -> Service -> Model)', completed: true },
       { title: 'เชื่อมต่อฐานข้อมูลด้วย Prisma ORM', completed: false },
     ],
+  });
+
+  const hashed = await bcrypt.hash('1234', 10);
+  
+  // Seed admin user
+  await prisma.user.upsert({
+    where: { email: 'admin@tsu.ac.th' },
+    update: {},
+    create: { email: 'admin@tsu.ac.th', password: hashed },
+  });
+
+  // Seed wave regular user
+  await prisma.user.upsert({
+    where: { email: 'wave@gmail.com' },
+    update: {},
+    create: { email: 'wave@gmail.com', password: hashed },
   });
 
   console.log('✅ Seed ข้อมูลเสร็จเรียบร้อย!');

@@ -4,6 +4,7 @@ import {
   removeMessage,
 } from '@/lib/messageService';
 import { withErrorHandling } from '@/lib/withErrorHandling';
+import { getSessionUserId } from '@/lib/session';
 
 export const GET = withErrorHandling(
   async (
@@ -25,11 +26,13 @@ export const PATCH = withErrorHandling(
     context: { params: Promise<{ id: string }> }
   ) => {
     const { id } = await context.params;
+    const sessionUserId = getSessionUserId(request);
     const updates = await request.json();
 
     const updated = await editMessage(
       id,
-      updates
+      updates,
+      sessionUserId
     );
 
     return Response.json({
@@ -45,7 +48,8 @@ export const DELETE = withErrorHandling(
     context: { params: Promise<{ id: string }> }
   ) => {
     const { id } = await context.params;
-    await removeMessage(id);
+    const sessionUserId = getSessionUserId(request);
+    await removeMessage(id, sessionUserId);
 
     return Response.json(
       {
