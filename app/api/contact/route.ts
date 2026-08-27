@@ -24,8 +24,11 @@ export const GET = withErrorHandling(async (request: Request) => {
   });
 });
 
+import { cookies } from 'next/headers';
+
 export const POST = withErrorHandling(async (request: Request) => {
   const body = await request.json();
+  const sessionUserId = (await cookies()).get('session')?.value || null;
 
   const name =
     typeof body?.name === 'string'
@@ -48,6 +51,7 @@ export const POST = withErrorHandling(async (request: Request) => {
     name,
     email,
     message,
+    authorId: sessionUserId,
   });
 
   return Response.json(

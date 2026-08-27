@@ -14,6 +14,8 @@ import {
 } from 'next/navigation';
 
 import type { ExternalItem } from '@/lib/external';
+import { StaggerContainer, FadeIn, HoverCard } from '@/components/MotionWrappers';
+import TextReveal from '@/components/TextReveal';
 
 type Source = 'products' | 'news';
 
@@ -227,32 +229,35 @@ function BlogSpaContent() {
   }
 
   return (
-    <div className="space-y-8">
+    <StaggerContainer className="space-y-8">
       {/* Header Banner */}
-      <section className="relative overflow-hidden rounded-3xl border border-zinc-200/90 bg-white p-8 sm:p-12 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]">
+      <FadeIn>
+      <section className="relative overflow-hidden rounded-3xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-8 sm:p-12 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-zinc-100/80 px-3 py-0.5 text-xs font-semibold text-zinc-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-zinc-900" />
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-800/80 px-3 py-0.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-zinc-900 dark:bg-zinc-100" />
             Client-Side Aggregator
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950">
-            Blog Aggregator & SPA Feed
-          </h1>
-          <p className="text-sm sm:text-base text-zinc-500 max-w-2xl">
+          <TextReveal 
+            text="Blog Aggregator & SPA Feed"
+            className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50"
+            as="h1"
+          />
+          <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 dark:text-zinc-500 max-w-2xl">
             ดึงข้อมูลจากภายนอก (FakeStore / Hacker News) ผ่าน Next.js API Routes พร้อมระบบค้นหาและเปิดดูรายละเอียดแบบ Single Page Application
           </p>
         </div>
 
         {/* Source Toggle Pills & Search */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-between sm:items-center border-t border-zinc-100 pt-6">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-between sm:items-center border-t border-zinc-100 dark:border-zinc-800 pt-6">
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => selectSource('products')}
               className={`rounded-full px-5 py-2 text-xs font-semibold shadow-xs transition-all cursor-pointer ${
                 source === 'products'
-                  ? 'bg-zinc-950 text-white'
-                  : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950'
+                  ? 'bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950'
+                  : 'border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:bg-zinc-800 hover:text-zinc-950 dark:text-zinc-50'
               }`}
             >
               🛍️ สินค้า (Products)
@@ -263,8 +268,8 @@ function BlogSpaContent() {
               onClick={() => selectSource('news')}
               className={`rounded-full px-5 py-2 text-xs font-semibold shadow-xs transition-all cursor-pointer ${
                 source === 'news'
-                  ? 'bg-zinc-950 text-white'
-                  : 'border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 hover:text-zinc-950'
+                  ? 'bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950'
+                  : 'border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:bg-zinc-800 hover:text-zinc-950 dark:text-zinc-50'
               }`}
             >
               📰 ข่าวไอที (Tech News)
@@ -278,17 +283,18 @@ function BlogSpaContent() {
               value={keyword}
               onChange={handleSearch}
               placeholder="ค้นหาชื่อหรือเนื้อหา..."
-              className="w-full rounded-full border border-zinc-200 bg-zinc-50 px-4 py-2 text-xs text-zinc-900 outline-none transition focus:border-zinc-900 focus:bg-white focus:ring-2 focus:ring-zinc-200"
+              className="w-full rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-100 px-4 py-2 text-xs text-zinc-900 dark:text-zinc-100 outline-none transition focus:border-zinc-900 focus:bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl focus:ring-2 focus:ring-zinc-200"
             />
           </div>
         </div>
       </section>
+      </FadeIn>
 
       {/* Loading State */}
       {isLoading && (
-        <div className="rounded-3xl border border-zinc-200/80 bg-white p-12 text-center shadow-xs">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-3 border-zinc-200 border-t-zinc-900" />
-          <p className="text-xs font-semibold text-zinc-500">
+        <div className="rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-12 text-center shadow-xs">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-3 border-zinc-200 dark:border-zinc-800 border-t-zinc-900" />
+          <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 dark:text-zinc-500">
             กำลังโหลดข้อมูลจาก External API...
           </p>
         </div>
@@ -306,7 +312,7 @@ function BlogSpaContent() {
           <button
             type="button"
             onClick={() => setRetryCount((count) => count + 1)}
-            className="mt-4 inline-flex rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white hover:bg-red-700 cursor-pointer"
+            className="mt-4 inline-flex rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white dark:text-zinc-950 hover:bg-red-700 cursor-pointer"
           >
             ลองใหม่อีกครั้ง
           </button>
@@ -315,8 +321,8 @@ function BlogSpaContent() {
 
       {/* Empty State */}
       {!isLoading && !error && items.length === 0 && (
-        <div className="rounded-3xl border border-zinc-200/80 bg-white p-12 text-center shadow-xs">
-          <p className="text-sm font-semibold text-zinc-800">
+        <div className="rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-12 text-center shadow-xs">
+          <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
             ไม่มีข้อมูลในหมวดนี้
           </p>
         </div>
@@ -324,14 +330,14 @@ function BlogSpaContent() {
 
       {/* Search Not Found State */}
       {!isLoading && !error && items.length > 0 && filteredItems.length === 0 && (
-        <div className="rounded-3xl border border-dashed border-zinc-200 bg-white p-12 text-center shadow-xs">
-          <p className="text-sm font-semibold text-zinc-800">
+        <div className="rounded-3xl border border-dashed border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-12 text-center shadow-xs">
+          <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
             ไม่พบผลการค้นหา “{keyword}”
           </p>
           <button
             type="button"
             onClick={clearSearch}
-            className="mt-4 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100 cursor-pointer"
+            className="mt-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-100 px-4 py-2 text-xs font-semibold text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:bg-zinc-800 cursor-pointer"
           >
             ล้างคำค้นหา
           </button>
@@ -340,17 +346,18 @@ function BlogSpaContent() {
 
       {/* Grid of Items */}
       {!isLoading && !error && filteredItems.length > 0 && (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <StaggerContainer className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredItems.map((item) => (
-            <button
-              type="button"
-              key={item.id}
-              onClick={() => openDetail(String(item.id))}
-              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200/80 bg-white text-left shadow-xs transition duration-200 hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-sm cursor-pointer"
-            >
+            <FadeIn key={item.id}>
+              <HoverCard className="h-full">
+                <button
+                  type="button"
+                  onClick={() => openDetail(String(item.id))}
+                  className="group w-full h-full flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl text-left shadow-xs transition duration-200 hover:-translate-y-0.5 hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-sm cursor-pointer"
+                >
               <div>
                 {item.image ? (
-                  <div className="flex h-48 items-center justify-center bg-white p-5 border-b border-zinc-100">
+                  <div className="flex h-48 items-center justify-center bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-5 border-b border-zinc-100 dark:border-zinc-800">
                     <img
                       src={item.image}
                       alt={item.title}
@@ -358,36 +365,38 @@ function BlogSpaContent() {
                     />
                   </div>
                 ) : (
-                  <div className="flex h-36 items-center justify-center bg-zinc-50 text-4xl border-b border-zinc-100">
+                  <div className="flex h-36 items-center justify-center bg-zinc-50 dark:bg-zinc-100 text-4xl border-b border-zinc-100 dark:border-zinc-800">
                     📰
                   </div>
                 )}
 
                 <div className="p-5">
-                  <span className="font-mono text-[11px] text-zinc-400">
+                  <span className="font-mono text-[11px] text-zinc-400 dark:text-zinc-500">
                     #{item.id}
                   </span>
-                  <h2 className="mt-1 line-clamp-2 text-sm font-bold text-zinc-900 group-hover:text-zinc-950 transition">
+                  <h2 className="mt-1 line-clamp-2 text-sm font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-950 dark:text-zinc-50 transition">
                     {item.title}
                   </h2>
-                  <p className="mt-1.5 line-clamp-2 text-xs text-zinc-500 leading-relaxed">
+                  <p className="mt-1.5 line-clamp-2 text-xs text-zinc-500 dark:text-zinc-400 dark:text-zinc-500 leading-relaxed">
                     {item.subtitle || 'ไม่มีรายละเอียด'}
                   </p>
                 </div>
               </div>
 
-              <div className="border-t border-zinc-100 px-5 py-3 text-xs font-semibold text-zinc-900 flex items-center justify-between">
-                <span>{source === 'products' ? 'ดูสินค้า' : 'อ่านข่าว'}</span>
-                <span className="group-hover:translate-x-0.5 transition-transform">→</span>
-              </div>
-            </button>
+                <div className="border-t border-zinc-100 dark:border-zinc-800 px-5 py-3 text-xs font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between">
+                  <span>{source === 'products' ? 'ดูสินค้า' : 'อ่านข่าว'}</span>
+                  <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                </div>
+              </button>
+            </HoverCard>
+          </FadeIn>
           ))}
-        </div>
+        </StaggerContainer>
       )}
 
       {/* Slide-over Detail Drawer */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-zinc-950/40 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex justify-end bg-zinc-950 dark:bg-zinc-100/40 backdrop-blur-xs">
           <button
             type="button"
             aria-label="ปิดรายละเอียด"
@@ -395,11 +404,11 @@ function BlogSpaContent() {
             className="absolute inset-0 cursor-default"
           />
 
-          <aside className="relative z-10 h-full w-full max-w-lg overflow-y-auto bg-white p-6 sm:p-8 shadow-2xl border-l border-zinc-200">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-5">
+          <aside className="relative z-10 h-full w-full max-w-lg overflow-y-auto bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-6 sm:p-8 shadow-2xl border-l border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-5">
               <div className="flex items-center gap-2">
-                <span className="flex h-2 w-2 rounded-full bg-zinc-900" />
-                <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-950">
+                <span className="flex h-2 w-2 rounded-full bg-zinc-900 dark:bg-zinc-100" />
+                <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-950 dark:text-zinc-50">
                   รายละเอียดข้อมูล
                 </h2>
               </div>
@@ -407,14 +416,14 @@ function BlogSpaContent() {
               <button
                 type="button"
                 onClick={closeDetail}
-                className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 cursor-pointer"
+                className="rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:bg-zinc-800 cursor-pointer"
               >
                 ปิด ✕
               </button>
             </div>
 
             {selectedItem.image ? (
-              <div className="my-6 flex h-64 items-center justify-center rounded-2xl border border-zinc-100 bg-white p-6">
+              <div className="my-6 flex h-64 items-center justify-center rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-6">
                 <img
                   src={selectedItem.image}
                   alt={selectedItem.title}
@@ -422,32 +431,32 @@ function BlogSpaContent() {
                 />
               </div>
             ) : (
-              <div className="my-6 flex h-40 items-center justify-center rounded-2xl bg-zinc-50 text-5xl">
+              <div className="my-6 flex h-40 items-center justify-center rounded-2xl bg-zinc-50 dark:bg-zinc-100 text-5xl">
                 📰
               </div>
             )}
 
             <div className="space-y-4">
-              <span className="inline-block rounded-full bg-zinc-100 px-3 py-1 font-mono text-xs font-semibold text-zinc-800">
+              <span className="inline-block rounded-full bg-zinc-100 dark:bg-zinc-800 px-3 py-1 font-mono text-xs font-semibold text-zinc-800 dark:text-zinc-200">
                 {source === 'products' ? 'PRODUCT ITEM' : 'NEWS ITEM'}
               </span>
 
-              <h3 className="text-xl font-bold text-zinc-950">
+              <h3 className="text-xl font-bold text-zinc-950 dark:text-zinc-50">
                 {selectedItem.title}
               </h3>
 
-              <div className="rounded-2xl border border-zinc-100 bg-zinc-50/70 p-5 text-sm leading-relaxed text-zinc-700">
+              <div className="rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50/70 p-5 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                 {selectedItem.subtitle || 'ไม่มีรายละเอียดเพิ่มเติม'}
               </div>
 
-              <p className="font-mono text-xs text-zinc-400 pt-4">
+              <p className="font-mono text-xs text-zinc-400 dark:text-zinc-500 pt-4">
                 Identifier: {selectedItem.id}
               </p>
             </div>
           </aside>
         </div>
       )}
-    </div>
+    </StaggerContainer>
   );
 }
 
@@ -455,8 +464,8 @@ export default function BlogSpaPage() {
   return (
     <Suspense
       fallback={
-        <div className="rounded-3xl border border-zinc-200 bg-white p-12 text-center">
-          <p className="text-xs text-zinc-500 font-semibold">
+        <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl p-12 text-center">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 dark:text-zinc-500 font-semibold">
             กำลังเตรียมหน้า SPA Feed...
           </p>
         </div>
@@ -465,4 +474,4 @@ export default function BlogSpaPage() {
       <BlogSpaContent />
     </Suspense>
   );
-}
+}

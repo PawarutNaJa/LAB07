@@ -15,3 +15,7 @@ export class ValidationError extends Error {
     this.name = 'ValidationError';
   }
 }
+
+export class ForbiddenError extends Error {
+  status = 403;
+}

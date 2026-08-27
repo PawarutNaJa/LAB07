@@ -120,9 +120,9 @@ export default function CommentForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="overflow-hidden rounded-3xl border border-zinc-200/90 bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]"
+      className="overflow-hidden rounded-3xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)]"
     >
-      <div className="bg-zinc-950 px-8 py-7 text-white">
+      <div className="bg-zinc-950 dark:bg-zinc-100 px-8 py-7 text-white dark:text-zinc-950">
         <div className="inline-flex items-center gap-1.5 rounded-full bg-zinc-800/80 px-3 py-0.5 text-xs font-semibold text-zinc-300">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
           Direct Message / Contact Form
@@ -130,7 +130,7 @@ export default function CommentForm({
         <h2 className="mt-3 text-2xl font-bold tracking-tight">
           ส่งข้อความถึงเรา
         </h2>
-        <p className="mt-1 text-xs text-zinc-400">
+        <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
           กรอกข้อมูลให้ครบถ้วนเพื่อส่งข้อความบันทึกลงระบบฐานข้อมูล
         </p>
       </div>
@@ -139,7 +139,7 @@ export default function CommentForm({
         <div>
           <label
             htmlFor="comment-name"
-            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700"
+            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300"
           >
             ชื่อผู้ติดต่อ
           </label>
@@ -153,10 +153,10 @@ export default function CommentForm({
               resetStatus();
             }}
             placeholder="กรอกชื่อของคุณ"
-            className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:ring-2 ${
+            className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:ring-2 ${
               name.length > 0 && !nameValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-zinc-200 focus:border-zinc-900 focus:ring-zinc-200'
+                : 'border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 focus:ring-zinc-200'
             }`}
           />
 
@@ -170,7 +170,7 @@ export default function CommentForm({
         <div>
           <label
             htmlFor="comment-email"
-            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700"
+            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300"
           >
             อีเมล
           </label>
@@ -184,15 +184,15 @@ export default function CommentForm({
               resetStatus();
             }}
             placeholder="example@email.com"
-            className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:ring-2 ${
+            className={`w-full rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:ring-2 ${
               email.length > 0 && !emailValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-zinc-200 focus:border-zinc-900 focus:ring-zinc-200'
+                : 'border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 focus:ring-zinc-200'
             }`}
           />
 
           <div className="mt-1.5 flex items-center justify-between gap-3 text-xs">
-            <p className="text-zinc-400">
+            <p className="text-zinc-400 dark:text-zinc-500">
               อีเมลสำหรับติดต่อกลับ
             </p>
 
@@ -200,7 +200,7 @@ export default function CommentForm({
               <span
                 className={`font-medium ${
                   emailValid
-                    ? 'text-zinc-700'
+                    ? 'text-zinc-700 dark:text-zinc-300'
                     : 'text-red-600'
                 }`}
               >
@@ -215,7 +215,7 @@ export default function CommentForm({
         <div>
           <label
             htmlFor="comment-content"
-            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700"
+            className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300"
           >
             เนื้อหาข้อความ
           </label>
@@ -230,14 +230,14 @@ export default function CommentForm({
             placeholder="เขียนข้อความหรือข้อเสนอแนะที่ต้องการส่ง..."
             rows={5}
             maxLength={300}
-            className={`w-full resize-y rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 outline-none transition focus:ring-2 ${
+            className={`w-full resize-y rounded-xl border bg-white px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 outline-none transition focus:ring-2 ${
               content.length > 0 && !contentValid
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-zinc-200 focus:border-zinc-900 focus:ring-zinc-200'
+                : 'border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 focus:ring-zinc-200'
             }`}
           />
 
-          <div className="mt-1.5 flex items-center justify-between text-xs text-zinc-400">
+          <div className="mt-1.5 flex items-center justify-between text-xs text-zinc-400 dark:text-zinc-500">
             <span>อย่างน้อย 5 ตัวอักษร</span>
             <span className="font-mono">
               {content.length}/300 ตัวอักษร
@@ -255,7 +255,7 @@ export default function CommentForm({
         )}
 
         {status === 'success' && (
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-xs font-semibold text-zinc-900">
+          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-100 px-4 py-3 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
             ✓ ส่งข้อความสำเร็จแล้ว ข้อความถูกบันทึกเรียบร้อย
           </div>
         )}
@@ -266,10 +266,10 @@ export default function CommentForm({
             !isValid ||
             status === 'sending'
           }
-          className={`w-full rounded-xl py-3 text-xs font-bold uppercase tracking-wider text-white transition cursor-pointer ${
+          className={`w-full rounded-xl py-3 text-xs font-bold uppercase tracking-wider text-white dark:text-zinc-950 transition cursor-pointer ${
             isValid && status !== 'sending'
-              ? 'bg-zinc-950 hover:bg-zinc-800 shadow-sm active:scale-[0.99]'
-              : 'cursor-not-allowed bg-zinc-200 text-zinc-400'
+              ? 'bg-zinc-950 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-sm active:scale-[0.99]'
+              : 'cursor-not-allowed bg-zinc-200 text-zinc-400 dark:text-zinc-500'
           }`}
         >
           {status === 'sending'

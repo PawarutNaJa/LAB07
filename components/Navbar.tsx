@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const primaryLinks = [
   { href: '/', label: 'หน้าแรก' },
@@ -21,6 +23,13 @@ export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   async function fetchSession() {
     try {
@@ -78,49 +87,63 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/90 bg-white/85 backdrop-blur-md transition-colors">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <div className="sticky top-4 z-50 px-4">
+      <header className="relative mx-auto max-w-6xl rounded-full border border-white/60 dark:border-zinc-800/60 border-b-zinc-200/50 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] transition-all overflow-hidden">
+        {/* Scroll Progress Bar */}
+        <motion.div 
+          className="absolute top-0 left-0 right-0 h-[2px] bg-zinc-950 dark:bg-zinc-100 origin-left z-50"
+          style={{ scaleX }}
+        />
+        
+        <div className="flex items-center justify-between px-4 py-2.5 sm:px-6">
         {/* Brand Logo */}
         <div className="flex items-center gap-6 lg:gap-8">
           <Link
             href="/"
             className="group flex items-center gap-2.5 transition"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-950 text-xs font-black tracking-tighter text-white shadow-sm transition group-hover:scale-105">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-950 dark:bg-zinc-100 text-xs font-black tracking-tighter text-white dark:text-zinc-950 shadow-sm transition group-hover:scale-105">
               MB
             </span>
-            <span className="font-mono text-sm font-bold tracking-wider text-zinc-950">
-              MYBLOG<span className="text-zinc-400">.</span>
+            <span className="font-mono text-sm font-bold tracking-wider text-zinc-950 dark:text-zinc-50">
+              MYBLOG<span className="text-zinc-400 dark:text-zinc-500">.</span>
             </span>
           </Link>
 
-          {/* Navigation links - Desktop */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {primaryLinks.map((link) => {
-              const isActive = pathname === link.href;
+        {/* Navigation links - Desktop */}
+        <nav className="hidden lg:flex items-center gap-1 relative">
+          {primaryLinks.map((link) => {
+            const isActive = pathname === link.href;
 
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-150 ${
-                    isActive
-                      ? 'bg-zinc-950 text-white shadow-xs'
-                      : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${
+                  isActive ? 'text-white dark:text-zinc-950' : 'text-zinc-600 dark:text-zinc-400 dark:text-zinc-500 hover:text-zinc-950 dark:text-zinc-50'
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="active-nav"
+                    className="absolute inset-0 bg-zinc-950 dark:bg-zinc-100 rounded-full shadow-xs"
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                    style={{ zIndex: -1 }}
+                  />
+                )}
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
         </div>
 
         {/* Action Buttons & Mobile Toggle */}
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Link
             href="/login"
-            className="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-800 shadow-xs transition hover:border-zinc-300 hover:bg-zinc-50"
+            className="inline-flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 dark:bg-zinc-100 px-3.5 py-1.5 text-xs font-semibold text-zinc-800 dark:text-zinc-200 dark:text-zinc-200 shadow-xs transition hover:border-zinc-300 dark:hover:border-zinc-600 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-zinc-900 dark:bg-zinc-100"
           >
             เข้าสู่ระบบ
           </Link>
@@ -131,8 +154,8 @@ export default function Navbar() {
             disabled={!loggedIn && !loading}
             className={`inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
               loggedIn
-                ? 'bg-zinc-950 text-white shadow-xs hover:bg-zinc-800 cursor-pointer'
-                : 'cursor-not-allowed bg-zinc-100 text-zinc-400'
+                ? 'bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950 shadow-xs hover:bg-zinc-800 dark:hover:bg-zinc-200 cursor-pointer'
+                : 'cursor-not-allowed bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500'
             } ${loading ? 'opacity-70' : ''}`}
           >
             ออกจากระบบ
@@ -142,7 +165,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 text-zinc-700 hover:bg-zinc-100 lg:hidden"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:bg-zinc-800 lg:hidden"
             aria-label="Toggle menu"
           >
             <svg
@@ -173,7 +196,7 @@ export default function Navbar() {
 
       {/* Mobile navigation drawer */}
       {mobileMenuOpen && (
-        <div className="border-t border-zinc-200 bg-white px-4 py-3 lg:hidden">
+        <div className="mx-auto mt-2 max-w-6xl overflow-hidden rounded-2xl border border-white/60 dark:border-zinc-800/60 bg-white/60 dark:bg-zinc-900/60 px-4 py-3 backdrop-blur-xl lg:hidden shadow-lg">
           <nav className="flex flex-col gap-1">
             {primaryLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -183,8 +206,8 @@ export default function Navbar() {
                   href={link.href}
                   className={`rounded-lg px-3 py-2 text-sm font-medium ${
                     isActive
-                      ? 'bg-zinc-950 text-white'
-                      : 'text-zinc-700 hover:bg-zinc-100'
+                      ? 'bg-zinc-950 dark:bg-zinc-100 text-white dark:text-zinc-950'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:bg-zinc-800'
                   }`}
                 >
                   {link.label}
@@ -194,7 +217,8 @@ export default function Navbar() {
           </nav>
         </div>
       )}
-    </header>
+      </header>
+    </div>
   );
 }
 
